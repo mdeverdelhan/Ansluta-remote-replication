@@ -11,6 +11,15 @@
 
 See http://pinout.xyz/.
 
+## Commands
+
+```bash
+git clone https://github.com/RGassmann/rpiCC2500.git
+cd rpiCC2500
+make
+sudo ./rpiCC2500
+```
+
 ## Resources
 
   * https://github.com/msloth/contiki-launchpad/commit/a951b28808d0eea5b8e069c0db9ff30271e9b6ba
