@@ -22,6 +22,8 @@ sudo ./rpiCC2500
 
 ## Resources
 
+  * https://github.com/doctor64/sensors-code
+
   * https://github.com/msloth/contiki-launchpad/commit/a951b28808d0eea5b8e069c0db9ff30271e9b6ba
   * https://github.com/RGassmann/rpiCC2500
   * https://github.com/yasiralijaved/Arduino-CC2500-Library
