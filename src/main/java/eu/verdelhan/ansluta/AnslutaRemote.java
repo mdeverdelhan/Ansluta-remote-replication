@@ -63,7 +63,7 @@ public class AnslutaRemote {
             sendStrobe(CC2500.CC2500_SRX);
             WriteReg(CC2500.REG_IOCFG1,(byte) 0x01);   // Switch MISO to output if a packet has been received or not
             delay(20);
-            if (misoInput.isLow()) { // TODO check condition
+            if (misoInput.isHigh()) { // TODO check condition
                 byte PacketLength = readRegister(CC2500.CC2500_FIFO);
                 byte[] recvPacket = new byte[PacketLength];
                 if(DEBUG) {
@@ -243,6 +243,7 @@ public class AnslutaRemote {
     public static void main(String[] args) throws Exception{
 
         AnslutaRemote r = new AnslutaRemote();
+        r.initAnsluta();
         r.readAddressBytes();
 
     }
