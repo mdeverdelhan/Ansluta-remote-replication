@@ -62,7 +62,7 @@ public class AnslutaRemote {
             }
             sendStrobe(CC2500.CC2500_SRX);
             WriteReg(CC2500.REG_IOCFG1,(byte) 0x01);   // Switch MISO to output if a packet has been received or not
-            delay(20);
+            delay(5);
             if (misoInput.isHigh()) { // TODO check condition
                 byte PacketLength = readRegister(CC2500.CC2500_FIFO);
                 byte[] recvPacket = new byte[PacketLength];
@@ -197,21 +197,21 @@ public class AnslutaRemote {
     private void init_CC2500() throws IOException {
         WriteReg(CC2500.REG_IOCFG2, (byte) 0x29);
         WriteReg(CC2500.REG_IOCFG0, (byte) 0x06);
-        WriteReg(CC2500.REG_PKTLEN, (byte) 0xFF);
+        WriteReg(CC2500.REG_PKTLEN, (byte) 0xFF); // Max packet length
         WriteReg(CC2500.REG_PKTCTRL1, (byte) 0x04);
-        WriteReg(CC2500.REG_PKTCTRL0, (byte) 0x05);
-        WriteReg(CC2500.REG_ADDR, (byte) 0x01);
-        WriteReg(CC2500.REG_CHANNR, (byte) 0x10);
+        WriteReg(CC2500.REG_PKTCTRL0, (byte) 0x05); // variable packet length; CRC enabled
+        WriteReg(CC2500.REG_ADDR, (byte) 0x01); // Device address
+        WriteReg(CC2500.REG_CHANNR, (byte) 0x10); // Channel number
         WriteReg(CC2500.REG_FSCTRL1, (byte) 0x09);
         WriteReg(CC2500.REG_FSCTRL0, (byte) 0x00);
-        WriteReg(CC2500.REG_FREQ2, (byte) 0x5D);
-        WriteReg(CC2500.REG_FREQ1, (byte) 0x93);
-        WriteReg(CC2500.REG_FREQ0, (byte) 0xB1);
+        WriteReg(CC2500.REG_FREQ2, (byte) 0x5D); // RF frequency 2433.000000 MHz 
+        WriteReg(CC2500.REG_FREQ1, (byte) 0x93); // RF frequency 2433.000000 MHz 
+        WriteReg(CC2500.REG_FREQ0, (byte) 0xB1); // RF frequency 2433.000000 MHz // RF frequency 2433.000000 MHz 
         WriteReg(CC2500.REG_MDMCFG4, (byte) 0x2D);
-        WriteReg(CC2500.REG_MDMCFG3, (byte) 0x3B);
-        WriteReg(CC2500.REG_MDMCFG2, (byte) 0x73); //MSK, (byte) No Manchester
+        WriteReg(CC2500.REG_MDMCFG3, (byte) 0x3B); // Data rate 250.000000 kbps
+        WriteReg(CC2500.REG_MDMCFG2, (byte) 0x73); //MSK, (byte) No Manchester; 30/32 sync mode
         WriteReg(CC2500.REG_MDMCFG1, (byte) 0xA2);
-        WriteReg(CC2500.REG_MDMCFG0, (byte) 0xF8);
+        WriteReg(CC2500.REG_MDMCFG0, (byte) 0xF8); // Channel spacing 199.9500 kHz
         WriteReg(CC2500.REG_DEVIATN, (byte) 0x01);
         WriteReg(CC2500.REG_MCSM2, (byte) 0x07);
         WriteReg(CC2500.REG_MCSM1, (byte) 0x30);
