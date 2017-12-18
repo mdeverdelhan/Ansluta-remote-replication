@@ -9,6 +9,13 @@ import com.pi4j.io.spi.SpiMode;
 
 import java.io.IOException;
 
+/**
+ * http://www.ti.com/lit/ds/swrs040c/swrs040c.pdf
+ * TODO:
+ *   - try to remove all the delays
+ *   - check the status of registers after WriteReg calls
+ *   - try test1, test2 and test3
+ */
 public class AnslutaRemote {
 
     public static final boolean DEBUG = true;
@@ -64,6 +71,8 @@ public class AnslutaRemote {
             WriteReg(CC2500.REG_IOCFG1,(byte) 0x01);   // Switch MISO to output if a packet has been received or not
             delay(5);
             if (misoInput.isHigh()) { // TODO check condition
+                //byte readStatus = readRegister(CC2500.REG_RXBYTES); // TODO: test3
+                //System.out.println("read status: " + bytesToHexString(readStatus));
                 byte PacketLength = readRegister(CC2500.CC2500_FIFO);
                 byte[] recvPacket = new byte[PacketLength];
                 if(DEBUG) {
@@ -108,11 +117,14 @@ public class AnslutaRemote {
     }
 
     private byte readRegister(byte addr) throws IOException {
+
         chipSelectOutput.low();
         while (misoInput.isHigh()) { };
         byte[] x = spi.write((byte) (addr + 0x80));
         delay(10);
         byte[] y = spi.write((byte) 0);
+        //byte[] readStatus = spi.write((byte) (addr + 0x80), (byte) 0); // TODO: test1
+        //System.out.println("Read status: " + bytesToHexString(readStatus));
         chipSelectOutput.high();
         return y[0];
     }
@@ -165,16 +177,19 @@ public class AnslutaRemote {
     private void WriteReg(byte addr, byte value) throws IOException {
         chipSelectOutput.low();
         while (misoInput.isHigh()) { };
-        spi.write(addr, value);
+        byte[] writeStatus = spi.write(addr, value);
         //SPI.transfer(addr);
         //delay(1); //delayMicroseconds(200);
         //SPI.transfer(value);
+        //System.out.println("Write status: " + bytesToHexString(writeStatus)); // TODO: test2
         chipSelectOutput.high();
+
+        System.out.println("Reg: " + bytesToHexString(addr) + " - Value: " + bytesToHexString(readRegister(addr)));
 
     }
 
     private static void delay(long delay) {
-        try { Thread.sleep(delay); } catch (InterruptedException ie) { }
+        /*try { Thread.sleep(delay); } catch (InterruptedException ie) { }*/
     }
 
     /** Array of all hexadecimal chars */
@@ -206,7 +221,7 @@ public class AnslutaRemote {
         WriteReg(CC2500.REG_FSCTRL0, (byte) 0x00);
         WriteReg(CC2500.REG_FREQ2, (byte) 0x5D); // RF frequency 2433.000000 MHz 
         WriteReg(CC2500.REG_FREQ1, (byte) 0x93); // RF frequency 2433.000000 MHz 
-        WriteReg(CC2500.REG_FREQ0, (byte) 0xB1); // RF frequency 2433.000000 MHz // RF frequency 2433.000000 MHz 
+        WriteReg(CC2500.REG_FREQ0, (byte) 0xB1); // RF frequency 2433.000000 MHz
         WriteReg(CC2500.REG_MDMCFG4, (byte) 0x2D);
         WriteReg(CC2500.REG_MDMCFG3, (byte) 0x3B); // Data rate 250.000000 kbps
         WriteReg(CC2500.REG_MDMCFG2, (byte) 0x73); //MSK, (byte) No Manchester; 30/32 sync mode
