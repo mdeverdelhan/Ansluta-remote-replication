@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * http://www.ti.com/lit/ds/swrs040c/swrs040c.pdf
  * TODO:
- *   - try to remove all the delays
+ *   * try to remove all the delays
  *   - check the status of registers after WriteReg calls
  *   - try test1, test2 and test3
  */
@@ -120,13 +120,10 @@ public class AnslutaRemote {
 
         chipSelectOutput.low();
         while (misoInput.isHigh()) { };
-        byte[] x = spi.write((byte) (addr + 0x80));
-        delay(10);
-        byte[] y = spi.write((byte) 0);
-        //byte[] readStatus = spi.write((byte) (addr + 0x80), (byte) 0); // TODO: test1
-        //System.out.println("Read status: " + bytesToHexString(readStatus));
+        byte[] readStatus = spi.write((byte) (addr + 0x80), (byte) 0); // TODO: test1
+        System.out.println("Read status: " + bytesToHexString(readStatus));
         chipSelectOutput.high();
-        return y[0];
+        return readStatus[0];
     }
 
     private void sendStrobe(byte strobe) throws IOException {
@@ -147,24 +144,8 @@ public class AnslutaRemote {
             sendStrobe(CC2500.CC2500_SFTX);    //0x3B SFTX Flush the TX FIFO buffer. Only issue SFTX in IDLE or TXFIFO_UNDERFLOW states.
             chipSelectOutput.low();
             while (misoInput.isHigh()) { };  //Wait untill MISO high (NdMarc: LOW!!!)
+            //Command 0x01=Light OFF 0x02=50% 0x03=100% 0xFF=Pairing
             spi.write((byte) 0x7F, (byte) 0x06, (byte) 0x55, (byte) 0x01, AddressByteA, AddressByteB, Command, (byte) 0xAA, (byte) 0xFF);
-            //SPI.transfer(0x7F);
-            //delayMicroseconds(delayA);
-            //SPI.transfer(0x06);
-            //delayMicroseconds(delayA);
-            //SPI.transfer(0x55);
-            //delayMicroseconds(delayA);
-            //SPI.transfer(0x01);
-            //delayMicroseconds(delayA);
-            //SPI.transfer(AddressByteA);                 //Address Byte A
-            //delayMicroseconds(delayA);
-            //SPI.transfer(AddressByteB);                 //Address Byte B
-            //delayMicroseconds(delayA);
-            //SPI.transfer(Command);                      //Command 0x01=Light OFF 0x02=50% 0x03=100% 0xFF=Pairing
-            //delayMicroseconds(delayA);
-            //SPI.transfer(0xAA);
-            //delayMicroseconds(delayA);
-            //SPI.transfer(0xFF);
             chipSelectOutput.high();
             sendStrobe(CC2500.CC2500_STX);                 //0x35 STX In IDLE state: Enable TX. Perform calibration first if MCSM0.FS_AUTOCAL=1. If in RX state and CCA is enabled: Only go to TX if channel is clear
             delay(1); //delayMicroseconds(10);      //Longer delay for transmitting
@@ -178,10 +159,8 @@ public class AnslutaRemote {
         chipSelectOutput.low();
         while (misoInput.isHigh()) { };
         byte[] writeStatus = spi.write(addr, value);
-        //SPI.transfer(addr);
-        //delay(1); //delayMicroseconds(200);
-        //SPI.transfer(value);
-        //System.out.println("Write status: " + bytesToHexString(writeStatus)); // TODO: test2
+
+        System.out.println("Write status: " + bytesToHexString(writeStatus)); // TODO: test2
         chipSelectOutput.high();
 
         System.out.println("Reg: " + bytesToHexString(addr) + " - Value: " + bytesToHexString(readRegister(addr)));
@@ -189,7 +168,7 @@ public class AnslutaRemote {
     }
 
     private static void delay(long delay) {
-        /*try { Thread.sleep(delay); } catch (InterruptedException ie) { }*/
+        try { Thread.sleep(delay); } catch (InterruptedException ie) { }
     }
 
     /** Array of all hexadecimal chars */
@@ -210,6 +189,7 @@ public class AnslutaRemote {
     }
 
     private void init_CC2500() throws IOException {
+
         WriteReg(CC2500.REG_IOCFG2, (byte) 0x29);
         WriteReg(CC2500.REG_IOCFG0, (byte) 0x06);
         WriteReg(CC2500.REG_PKTLEN, (byte) 0xFF); // Max packet length
