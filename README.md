@@ -33,11 +33,11 @@ See http://pinout.xyz/ & http://pi4j.com/pins/model-3b-rev1.html
 
 ### Pictures
 
-![Raspberry with CC2500](res/raspberry_with_cc2500.jpg?raw=true =800x)
+![Raspberry with CC2500](res/raspberry_with_cc2500.jpg)
 
-![Raspberry wiring](res/raspberry_wiring.jpg?raw=true =400x)
+![Raspberry wiring](res/raspberry_wiring.jpg)
 
-![CC2500 wiring](res/cc2500_wiring.jpg?raw=true =200x)
+![CC2500 wiring](res/cc2500_wiring.jpg)
 
 
 ## Software
@@ -49,7 +49,9 @@ The project is divided into 3 classes. The main class is [AnslutaRemote](src/mai
 
 For now, the program is designed to listen to a real Ansluta remote in order to print its address. Here is how to test it:
 
-  - On the Raspberry Pi run `java -jar ./ansluta-remote.jar`;
+  - Build the program using Maven: `mvn clean package`;
+  - Copy the resulting Jar file on the Raspberry Pi;
+  - On the Raspberry Pi, run `java -jar ./ansluta-remote.jar`;
   - During the listening phase, press the button of a real Ansluta remote;
   - The program detects a zero-length packet and returns the following exception:
 ```Packet received: 0 bytes
