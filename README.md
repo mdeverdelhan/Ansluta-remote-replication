@@ -1,6 +1,8 @@
 # Ansluta-remote-replication
 
-Here is an attempt to replicate an Ikea Ansluta remote using a Raspberry Pi, a TI CC2500, Java, and Pi4J. **Pull requests are welcome! :)**
+Here is an attempt to replicate an Ikea Ansluta remote using a Raspberry Pi, a TI CC2500, Java, and Pi4J.
+
+**Pull requests are welcome! :)**
 
 
 ## Hardware
@@ -9,6 +11,7 @@ There are at least two different versions of the Ikea Ansluta remote. This proje
 
 The original remote uses a [TI CC2500 2.4GHz RF controller](http://www.ti.com/lit/ds/swrs040c/swrs040c.pdf) to send its commands. I chose to use the same component. I bought this one (WLC24D): 
 https://www.ebay.com/itm/2PCS-1-8-3-6V-CC2500-IC-Wireless-RF-2400MHZ-Transceiver-Module-SPI-ISM-Demo-Code/401239287968
+
 **Note: This module does not have an onboard antenna. You will have to connect one to the antenna pin.**
 
 I use the Raspberry Pi 3 model B.
@@ -30,11 +33,11 @@ See http://pinout.xyz/ & http://pi4j.com/pins/model-3b-rev1.html
 
 ### Pictures
 
-![Raspberry with CC2500](res/raspberry_with_cc2500.jpg?raw=true)
+![Raspberry with CC2500](res/raspberry_with_cc2500.jpg?raw=true =800x)
 
-![Raspberry wiring](res/raspberry_wiring.jpg?raw=true)
+![Raspberry wiring](res/raspberry_wiring.jpg?raw=true =400x)
 
-![CC2500 wiring](res/cc2500_wiring.jpg?raw=true)
+![CC2500 wiring](res/cc2500_wiring.jpg?raw=true =200x)
 
 
 ## Software
@@ -52,7 +55,8 @@ For now, the program is designed to listen to a real Ansluta remote in order to 
 ```Packet received: 0 bytes
 Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 0
     at eu.verdelhan.ansluta.AnslutaRemote.readAddressBytes(AnslutaRemote.java:92)
-    at eu.verdelhan.ansluta.AnslutaRemote.main(AnslutaRemote.java:242)```
+    at eu.verdelhan.ansluta.AnslutaRemote.main(AnslutaRemote.java:242)
+```
 
 I will be very grateful to the one who will solve this issue. :)
 
