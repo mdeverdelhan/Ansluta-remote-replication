@@ -89,7 +89,7 @@ public class AnslutaRemote {
 
                 if (PacketLength <= 8) { // A packet from the remote cant be longer than 8 bytes
                     // Read the received data from CC2500
-                    for (byte i = 1; i <= PacketLength; i++) {
+                    for (byte i = 0; i < PacketLength; i++) {
                         recvPacket[i] = readRegister(CC2500.CC2500_FIFO);
                     }
                     if (DEBUG) {
